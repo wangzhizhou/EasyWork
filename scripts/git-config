@@ -1,0 +1,271 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+show_options() 
+{
+    PS3="😄 Choose an option number show above: "
+    opts=("personal" "work" "custom")
+    select opt in "${opts[@]}"
+    do
+        case $opt in
+            "personal")
+                git_user_name="wangzhizhou"
+                git_user_email="824219521@qq.com"
+                break
+                ;;
+            "work")
+                git_user_name="wangzhizhou"
+                git_user_email="wangzhizhou@bytedance.com"
+                break
+                ;;
+                "custom")
+                read -p "❓ Please input your git user name: "  git_user_name
+                read -p "❓ Please input your git user email: " git_user_email
+                break
+                ;;
+            *)
+                echo "💥 You choose invalid, use default config!!!"
+                break
+                ;;
+        esac
+    done
+}
+
+show_git_config()
+{
+    is_local_git=$1
+
+    if [[ $is_local_git -eq 0 ]]; then
+        git_user_name=$(git config --global --get user.name)
+        git_user_email=$(git config --global --get user.email)
+        echo "🧑 Current global git user name  👉 $git_user_name" 
+        echo "📪 Current global git user email 👉 $git_user_email"
+    else 
+        git_user_name=$(git config --local --get user.name)
+        git_user_email=$(git config --local --get user.email)
+        echo "🧑 Current local git user name  👉 $git_user_name" 
+        echo "📪 Current local git user email 👉 $git_user_email"
+    fi
+
+}
+
+config_git() 
+{
+git_user_name="$1"
+git_user_email="$2"
+is_local_git=$3
+
+cat > ~/.gitconfig <<EOF
+[user]
+    name = $git_user_name
+    email = $git_user_email
+
+[diff]
+    submodule = log
+
+[pager]
+    branch = false
+
+[pull]
+    rebase = false
+
+[alias]
+
+    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold yellow) by %an' --abbrev-commit --date=relative --decorate
+    la = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold yellow) by %an' --abbrev-commit --date=relative --decorate --all
+    lm = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --author=$git_user_name
+    lma = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --all --author=$git_user_name
+    
+    # 查看本地分支列表, 前面有*号的分支是当前分支
+    b = branch
+    # 查看远程分支列表
+    br = branch -r
+    # 查看本地分支详情信息，包括分支当前最近一次提交，及对应的远程仓库分支名称
+    bv = branch -vv
+    # 删除分支
+    bd = branch -d
+    # 强制删除分支
+    bD = branch -D
+    # 绑定当前本地分支对应的远程仓库分支
+    bu = branch -u
+    # 拉取绑定的远程仓库分支上的最新提交到本地对应分支上
+    pl = pull
+    # 拉取所有子模块绑定的远程仓库分支上的最新提交到本地对应分支上
+    plrs = pull --recurse-submodules --ff-only
+    # 提交本地分支上的内容到远程仓库对应的分支上
+    pu = push
+    # 以rebase的方式pull
+    plrb = pull --rebase
+    # 如果本地分支和远程仓库同名，则不用指定远程仓库对应分支即可直接提交
+    po = push origin
+    pof = push origin -f
+	pofs = push origin --force-with-lease
+    # 丢弃改动
+    dp = restore 
+    # 忽略指定文件改动跟踪
+    ic = update-index --assume-unchanged
+    # 恢复指定文件改动跟踪
+    uic = update-index --no-assume-unchanged
+
+	# Add
+    a = add
+
+	# Commit
+    c = commit
+	ca = commit --amend
+
+	# Checkout
+    co = checkout
+    cb = checkout -b
+
+	# Clone
+    cl = clone
+    cdf = clean -dxf
+    clrs = clone --recurse-submodules
+
+	# Cherry Pick
+    pk = cherry-pick
+    pkc = cherry-pick --continue
+    pka = cherry-pick --abort
+
+	# Diff
+    d = diff
+    dsm = diff --submodule
+
+	# Merge 
+    m = merge
+	mc = merge --continue
+	ma = merge --abort
+
+	# Status
+    s = status
+    ss = status -s
+
+	# Stash
+    st = stash
+    sl = stash list
+    sp = stash pop
+    
+	# Tag
+    t = tag
+    tl = tag -l
+    td = tag -d
+
+	# Submodule
+    sm = submodule
+    smi = submodule init
+    smu = submodule update
+    sms = submodule sync
+    smur = submodule update --remote
+    smuir = submodule update --init --recursive
+
+	# Remote
+    r = remote
+    rv = remote -v
+    rpo = remote prune origin
+
+	# Reset
+    rst = reset
+    rsth = reset --hard HEAD
+
+	# Revert
+    rvt = revert
+    
+    # rebase 
+    rb = rebase
+    rbc = rebase --continue
+    rba = rebase --abort
+    rbi = rebase -i 
+    rbir = rebase -i --root
+
+	# WorkTree
+	wt = worktree
+	wta = worktree add
+	wtl = worktree list
+	wtr = worktree remove
+	wtm = worktree move
+	wtp = worktree prune
+
+	# format-patch
+	fp = format-patch
+	fp1 = format-patch -1
+	ap = am
+
+    h = config --global --list
+	sh = !git --no-pager show HEAD
+[color]
+    ui = auto
+
+EOF
+if [[ $is_local_git -eq 0 ]]; then
+    git config --global user.name $git_user_name
+    git config --global user.email $git_user_email
+else
+    git config --local user.name $git_user_name
+    git config --local user.email $git_user_email
+fi
+
+echo "✅✅✅ Configure Git Done ✅✅✅"
+show_git_config $is_local_git
+echo "🎉🎉🎉 Congratulations! And you can use Git more conveniently!"
+}
+
+$(git --version)
+if [ $? -ne 0 ]
+then
+	echo "💥 Git has not been installed! You should install Git first!"
+	exit 1;
+fi
+
+read -p "❗️ Config Local Git? (Y|y|N|n)" is_local_git
+case "$is_local_git" in
+    Y|y)
+        echo "💡 You choose config local git"
+        config_local_git=1
+    ;;
+    N|n)
+        echo "💡 You choose config global git"
+        config_local_git=0
+    ;;
+    *)
+        echo "💥 Invalid Answer, and Terminated!"
+        exit -1
+    ;;
+esac
+
+show_git_config $config_local_git
+
+read -p "❓ Do you want use current git user and email? (y/n|Y/N|yes/no|YES/NO) "  answer
+case "$answer" in
+    "Y"|"y"|"yes"|"YES")
+    ;;
+    "N"|"n"|"no"|"NO")
+        echo
+        echo "❗️ You can choose a pre-defined username and email or you can custom them"
+        show_options
+    ;;
+    *)
+        echo "💥 Invalid Answer, and Terminated!"
+        exit -1
+    ;;
+esac
+
+echo "✅ You choose configure your git user name as  👉 $git_user_name"
+echo "✅ You choose configure your git user email as 👉 $git_user_email"
+
+read -p "❗️ Please check your git username and email correctly. And Continue: (Y|y|N|n)" next
+case "$next" in
+    Y|y)
+        echo "🏃🏃🏃 Your choose configure Git right now! Please wait a few seconds ..."
+    ;;
+    N|n)
+        echo "❌ You choose configure git later, and terminated!"
+        exit 0
+    ;;
+    *)
+        echo "💥 Invalid Answer, and Terminated!"
+        exit -1
+    ;;
+esac
+
+config_git $git_user_name $git_user_email $config_local_git

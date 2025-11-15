@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+#set -x
+
+os_type="$(uname -s)"
+sh_type="$(basename $SHELL)"
+case $os_type in
+  "Darwin")
+    case $sh_type in
+      "zsh")
+          	SH_CONFIG_ORIGIN=~/.zshrc
+			echo "Install Oh My Zsh ..."
+			eval "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+			echo "Install Oh My Zsh Completed!"
+			exit 0
+        	;;
+      "bash")
+          	SH_CONFIG_ORIGIN=~/.bash_profile
+        	;;
+      *)
+        	echo "Unknown Shell Type!!!"
+        	exit -1
+        	;;
+    esac
+    ;;
+  "Linux")
+      SH_CONFIG_ORIGIN=~/.bashrc
+    ;;
+  *)
+    echo "Unknown Operating System Type!!!"
+    exit -1
+    ;;
+esac
+
+echo $SH_CONFIG_ORIGIN
+if [ ! -f $SH_CONFIG_ORIGIN ];
+then
+	touch $SH_CONFIG_ORIGIN
+fi	
+	
+
+
+SH_CONFIG_FILE=~/.sh_config_custom
+cat > "$SH_CONFIG_FILE" <<EOF
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# config the shell prompt schema
+# \h:\W \u$
+# \d ：#代表日期，格式为weekday month date，例如："Mon Aug 1"
+# \H ：#完整的主机名称
+# \h ：#仅取主机的第一个名字
+# \t ：#显示时间为24小时格式，如：HH：MM：SS
+# \T ：#显示时间为12小时格式
+# \A ：#显示时间为24小时格式：HH：MM
+# \u ：#当前用户的账号名称
+# \v ：#BASH的版本信息
+# \w ：#完整的工作目录名称
+# \W ：#利用basename取得工作目录名称，所以只会列出最后一个目录
+# \# ：#下达的第几个命令
+# \$ ：#提示字符，如果是root时，提示符为：# ，普通用户则为：$
+#
+# 字符颜色的格式:
+#               \[\e[F;Bm\]
+# 其中“F“为字体颜色，编号为30-37，“B”为背景颜色，编号为40-47
+#
+#      F       B
+#      30      40      黑色
+#      31      41      红色
+#      32      42      绿色
+#      33      43      黄色
+#      34      44      蓝色
+#      35      45      紫红色
+#      36      46      青蓝色
+#      37      47      白色
+#
+
+BLACK=$'\e[30;40m'
+RED=$'\e[31;40m'
+GREEN=$'\e[32;40m'
+YELLOW=$'\e[33;40m'
+BLUE=$'\e[34;40m'
+PURPLE=$'\e[35;40m'
+CYAN=$'\e[36;40m'
+WHITE=$'\e[37;40m'
+RESET=$'\e[0m'
+
+export CLICOLOR=1
+
+function git-branch-name {
+    git symbolic-ref --short -q HEAD 2>/dev/null
+}
+
+function git-branch-prompt {
+  local branch=\$(git-branch-name)
+  if [ \$branch ]; 
+  then 
+    hint=\$(git branch --format '%(refname:short) -> %(upstream:short)' | grep "^\${branch} -> ")
+    basename=\$(basename \$(pwd))
+    printf "[%s: %s]\n$ " "\$basename" "\$hint"; 
+  fi
+}
+
+#export PS1='\[\${PURPLE}\][\[\${GREEN}\]\u\[\${GREEN}\]@\[\${GREEN}\]\h \[\${RED}\]\w\[\${RED}\]\[\${PURPLE}\]]\n\[\${WHITE}\]\$ '
+export PS1='\n{\\__/}\n(● .●)\n/ >>> \[\${GREEN}\]\$(git-branch-prompt)\[\${RESET}\]'
+
+# for system command
+alias grep='grep --color=auto'
+alias mv='mv -i'
+alias cp='cp -i'
+alias rm='rm -i'
+alias q='exit'
+
+# for git
+alias g='git'
+
+# for ffmpeg
+alias ff='ffmpeg'
+alias fp='ffplay'
+alias fb='ffprobe'
+alias fs='ffserver'
+
+# for Swift Package Manager
+alias spm='swift package'
+
+### Custom Section
+
+# run n times command
+# eg: run 10 echo hello
+function run
+{
+    number=\$1
+    shift
+    for n in \$(seq \$number); do "\$@"; done
+}
+
+alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/bash-config)"'
+alias cgit='bash -c "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/git-config)"'
+alias cvim='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/vim-config)"'
+EOF
+
+cat $SH_CONFIG_ORIGIN | grep "source $SH_CONFIG_FILE" 
+if [ $? -ne 0 ]; 
+then
+  echo source $SH_CONFIG_FILE >> $SH_CONFIG_ORIGIN
+fi
+
+source $SH_CONFIG_ORIGIN
+echo config sh completed! Please reopen a terminal use sh
