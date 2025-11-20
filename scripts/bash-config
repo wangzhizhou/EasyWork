@@ -9,11 +9,16 @@ case $os_type in
   "Darwin")
     case $sh_type in
       "zsh")
-          	SH_CONFIG_ORIGIN=~/.zshrc
-			echo "Install Oh My Zsh ..."
-			eval "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-			echo "Install Oh My Zsh Completed!"
-			exit 0
+          SH_CONFIG_ORIGIN=~/.zshrc
+          if [ -n "$ZSH" ] && [ -d "$ZSH" ]; then
+            echo "Oh My Zsh has been installed: $ZSH"
+            exit 0
+          else
+            echo "Install Oh My Zsh ..."
+            eval "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+            echo "Install Oh My Zsh Completed!"
+            exit 0
+          fi
         	;;
       "bash")
           	SH_CONFIG_ORIGIN=~/.bash_profile
@@ -49,22 +54,22 @@ export LANG=en_US.UTF-8
 
 # config the shell prompt schema
 # \h:\W \u$
-# \d ：#代表日期，格式为weekday month date，例如："Mon Aug 1"
-# \H ：#完整的主机名称
-# \h ：#仅取主机的第一个名字
-# \t ：#显示时间为24小时格式，如：HH：MM：SS
-# \T ：#显示时间为12小时格式
-# \A ：#显示时间为24小时格式：HH：MM
-# \u ：#当前用户的账号名称
-# \v ：#BASH的版本信息
-# \w ：#完整的工作目录名称
-# \W ：#利用basename取得工作目录名称，所以只会列出最后一个目录
-# \# ：#下达的第几个命令
-# \$ ：#提示字符，如果是root时，提示符为：# ，普通用户则为：$
+# \d :#代表日期, 格式为weekday month date, 例如:"Mon Aug 1"
+# \H :#完整的主机名称
+# \h :#仅取主机的第一个名字
+# \t :#显示时间为24小时格式, 如:HH:MM:SS
+# \T :#显示时间为12小时格式
+# \A :#显示时间为24小时格式:HH:MM
+# \u :#当前用户的账号名称
+# \v :#BASH的版本信息
+# \w :#完整的工作目录名称
+# \W :#利用basename取得工作目录名称, 所以只会列出最后一个目录
+# \# :#下达的第几个命令
+# \$ :#提示字符, 如果是root时, 提示符为:# , 普通用户则为:$
 #
 # 字符颜色的格式:
 #               \[\e[F;Bm\]
-# 其中“F“为字体颜色，编号为30-37，“B”为背景颜色，编号为40-47
+# 其中“F“为字体颜色, 编号为30-37, “B”为背景颜色, 编号为40-47
 #
 #      F       B
 #      30      40      黑色
