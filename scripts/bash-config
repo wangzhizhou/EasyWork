@@ -10,15 +10,10 @@ case $os_type in
     case $sh_type in
       "zsh")
           SH_CONFIG_ORIGIN=~/.zshrc
-          if [ -n "$ZSH" ] && [ -d "$ZSH" ]; then
-            echo "Oh My Zsh has been installed: $ZSH"
-            exit 0
-          else
-            echo "Install Oh My Zsh ..."
-            eval "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-            echo "Install Oh My Zsh Completed!"
-            exit 0
-          fi
+          echo "Install Oh My Zsh ..."
+          eval "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+          echo "Install Oh My Zsh Completed!"
+          exit 0
         	;;
       "bash")
           	SH_CONFIG_ORIGIN=~/.bash_profile
