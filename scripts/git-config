@@ -51,7 +51,12 @@ show_git_config()
 
 write_git_global_config() 
 {
+git_global_user_name="$(git config --global --get user.name)"
+git_global_user_email="$(git config --global --get user.email)"
 cat > ~/.gitconfig <<EOF
+[user]
+    name = "$git_global_user_name"
+    email = "$git_global_user_email"
 [diff]
     submodule = log
 
