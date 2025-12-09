@@ -49,17 +49,9 @@ show_git_config()
 
 }
 
-config_git() 
+write_git_global_config() 
 {
-git_user_name="$1"
-git_user_email="$2"
-is_local_git=$3
-
 cat > ~/.gitconfig <<EOF
-[user]
-    name = $git_user_name
-    email = $git_user_email
-
 [diff]
     submodule = log
 
@@ -71,11 +63,25 @@ cat > ~/.gitconfig <<EOF
 
 [alias]
 
+    # 配置项查看
+    cfg = config --global --list
+    cfl = config --local --list
+    cfs = config --system --list
+    cfw = config --worktree --list
+
+    # 美化日志显示
     l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold yellow) by %an' --abbrev-commit --date=relative --decorate
     la = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold yellow) by %an' --abbrev-commit --date=relative --decorate --all
-    lm = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --author=$git_user_name
-    lma = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --all --author=$git_user_name
-    
+    lm = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --author=\"\$(git config user.name)\"
+    lma = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate --author=\"\$(git config user.name)\" --all
+    lc = log --oneline -n 10
+    lg = log --graph --oneline --decorate --all
+    lgs = log --stat -n 1
+    lgt = log --oneline --since="2 weeks ago"
+    lgb = log --oneline --branches
+    lgr = log --oneline --remotes
+    lgtg = log --oneline --tags
+
     # 查看本地分支列表, 前面有*号的分支是当前分支
     b = branch
     # 查看远程分支列表
@@ -196,8 +202,15 @@ cat > ~/.gitconfig <<EOF
 	sh = !git --no-pager show HEAD
 [color]
     ui = auto
-
 EOF
+}
+
+config_git() 
+{
+# 配置用户名和邮箱
+git_user_name="$1"
+git_user_email="$2"
+is_local_git=$3
 if [[ $is_local_git -eq 0 ]]; then
     git config --global user.name $git_user_name
     git config --global user.email $git_user_email
@@ -269,4 +282,4 @@ case "$next" in
     ;;
 esac
 
-config_git $git_user_name $git_user_email $config_local_git
+write_git_global_config && config_git $git_user_name $git_user_email $config_local_git
