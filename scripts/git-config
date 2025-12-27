@@ -111,6 +111,8 @@ cat > ~/.gitconfig <<EOF
     po = push origin
     pof = push origin -f
 	poh = push origin HEAD
+    pot = push origin --tags
+    poa = push origin --all
 	pofs = push origin --force-with-lease
     # 丢弃改动
     dp = restore 
