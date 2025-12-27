@@ -127,6 +127,7 @@ cat > ~/.gitconfig <<EOF
 	# Commit
     c = commit
 	ca = commit --amend
+    cm = commit -m
 
 	# Checkout
     co = checkout
