@@ -89,11 +89,11 @@ RESET=$'\e[0m'
 
 export CLICOLOR=1
 
-function git-branch-name {
+function git-branch-name() {
     git symbolic-ref --short -q HEAD 2>/dev/null
 }
 
-function git-branch-prompt {
+function git-branch-prompt() {
   local branch=\$(git-branch-name)
   if [ \$branch ]; 
   then 
@@ -129,7 +129,7 @@ alias spm='swift package'
 
 # run n times command
 # eg: run 10 echo hello
-function run
+function run()
 {
     number=\$1
     shift
