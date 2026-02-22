@@ -172,4 +172,3 @@ fi
 echo "==> 重新加载配置（当前会话）"
 source $SH_CONFIG_ORIGIN
 echo "==> 配置完成"
-echo "config sh completed! Please reopen a terminal use sh"
