@@ -47,6 +47,10 @@ cat > "$SH_CONFIG_FILE" <<EOF
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
+# enable bracketed paste mode, which allows pasting text without accidentally executing it
+# 避免粘贴文本时出于首尾有额外字符出现,例如: 00~ xxx 01~
+bind 'set enable-bracketed-paste on'
+
 # config the shell prompt schema
 # \h:\W \u$
 # \d :#代表日期, 格式为weekday month date, 例如:"Mon Aug 1"
