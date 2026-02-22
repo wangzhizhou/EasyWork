@@ -7,7 +7,7 @@
 终端下运行下面命令：
 
 ```bash
-eval "$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/bash-config)"
+eval "$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/shell-config)"
 ```
 
 之后，重新打开终端后，可以使用快捷指令：
