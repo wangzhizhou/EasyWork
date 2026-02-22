@@ -5,11 +5,13 @@
 
 os_type="$(uname -s)"
 sh_type="$(basename $SHELL)"
+echo "==> 检测到系统: $os_type, Shell: $sh_type"
 case $os_type in
   "Darwin")
     case $sh_type in
       "zsh")
           SH_CONFIG_ORIGIN=~/.zshrc
+          echo "==> macOS zsh 环境准备"
           if [ ! -d "$HOME/.oh-my-zsh" ]; then
             echo "Install Oh My Zsh ..."
             RUNZSH="no" KEEP_ZSHRC="yes" CHSH="no" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -34,15 +36,19 @@ case $os_type in
     ;;
 esac
 
-echo $SH_CONFIG_ORIGIN
-if [ ! -f $SH_CONFIG_ORIGIN ];
+echo "==> 使用配置文件: $SH_CONFIG_ORIGIN"
+if [ ! -f "$SH_CONFIG_ORIGIN" ];
 then
-	touch $SH_CONFIG_ORIGIN
+	touch "$SH_CONFIG_ORIGIN"
+  echo "==> 已创建: $SH_CONFIG_ORIGIN"
+else
+  echo "==> 已存在: $SH_CONFIG_ORIGIN"
 fi	
 	
 
 
 SH_CONFIG_FILE=~/.sh_config_custom
+echo "==> 生成自定义配置: $SH_CONFIG_FILE"
 cat > "$SH_CONFIG_FILE" <<EOF
 
 export LC_ALL=en_US.UTF-8
@@ -152,12 +158,18 @@ alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/Ea
 alias cgit='bash -c "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/git-config)"'
 alias cvim='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/vim-config)"'
 EOF
+echo "==> 自定义配置已写入: $SH_CONFIG_FILE"
 
-cat $SH_CONFIG_ORIGIN | grep "source $SH_CONFIG_FILE" 
-if [ $? -ne 0 ]; 
-then
-  echo source $SH_CONFIG_FILE >> $SH_CONFIG_ORIGIN
+echo "==> 检查并注入 source 语句"
+grep "source $SH_CONFIG_FILE" "$SH_CONFIG_ORIGIN" >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "source $SH_CONFIG_FILE" >> "$SH_CONFIG_ORIGIN"
+  echo "==> 已注入 source 至: $SH_CONFIG_ORIGIN"
+else
+  echo "==> 已存在 source 语句, 跳过注入"
 fi
 
+echo "==> 重新加载配置（当前会话）"
 source $SH_CONFIG_ORIGIN
-echo config sh completed! Please reopen a terminal use sh
+echo "==> 配置完成"
+echo "config sh completed! Please reopen a terminal use sh"
