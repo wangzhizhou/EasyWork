@@ -50,7 +50,9 @@ export LANG=en_US.UTF-8
 
 # enable bracketed paste mode, which allows pasting text without accidentally executing it
 # 避免粘贴文本时出于首尾有额外字符出现,例如: 00~ xxx 01~
+if [ -n "\$BASH_VERSION" ]; then
 bind 'set enable-bracketed-paste on'
+fi
 
 # config the shell prompt schema
 # \h:\W \u$
@@ -109,7 +111,12 @@ function git-branch-prompt() {
 }
 
 #export PS1='\[\${PURPLE}\][\[\${GREEN}\]\u\[\${GREEN}\]@\[\${GREEN}\]\h \[\${RED}\]\w\[\${RED}\]\[\${PURPLE}\]]\n\[\${WHITE}\]\$ '
+if [ -n "\$ZSH_VERSION" ]; then
+setopt PROMPT_SUBST
+PROMPT=\$'\n{\\__/}\n(● .●)\n/ >>> %{\${GREEN}%}\$(git-branch-prompt)%{\${RESET}%}'
+else
 export PS1='\n{\\__/}\n(● .●)\n/ >>> \[\${GREEN}\]\$(git-branch-prompt)\[\${RESET}\]'
+fi
 
 # for system command
 alias grep='grep --color=auto'
@@ -141,7 +148,7 @@ function run()
     for n in \$(seq \$number); do "\$@"; done
 }
 
-alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/bash-config)"'
+alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/shell-config)"'
 alias cgit='bash -c "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/git-config)"'
 alias cvim='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/vim-config)"'
 EOF
