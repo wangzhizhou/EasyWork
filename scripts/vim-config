@@ -44,6 +44,38 @@ ensure_node() {
 }
 ensure_node || echo "Warning: Node.js unavailable. coc.nvim/markdown-preview may not work."
 
+echo "==> Checking ripgrep (rg) binary"
+ensure_ripgrep() {
+  if command -v rg >/dev/null 2>&1; then
+    echo "ripgrep detected: $(rg --version | head -n1)"
+    return 0
+  fi
+  echo "ripgrep not found. Attempting installation..."
+  if command -v brew >/dev/null 2>&1; then
+    brew install ripgrep || true
+  elif command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update -y && sudo apt-get install -y ripgrep || true
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y ripgrep || true
+  elif command -v yum >/dev/null 2>&1; then
+    sudo yum install -y ripgrep || true
+  elif command -v pacman >/dev/null 2>&1; then
+    sudo pacman -S --noconfirm ripgrep || true
+  elif command -v zypper >/dev/null 2>&1; then
+    sudo zypper install -y ripgrep || true
+  elif command -v cargo >/dev/null 2>&1; then
+    cargo install ripgrep && export PATH="$HOME/.cargo/bin:$PATH" || true
+  fi
+  if command -v rg >/dev/null 2>&1; then
+    echo "ripgrep ready: $(rg --version | head -n1)"
+    return 0
+  else
+    echo "ripgrep installation failed. :Rg will not work until rg is installed."
+    return 1
+  fi
+}
+ensure_ripgrep || true
+
 # vim-plug: https://github.com/junegunn/vim-plug
 # Minimalist Vim Plugin Manager
 # Unix
