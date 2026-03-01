@@ -116,10 +116,9 @@ function git-branch-prompt() {
   fi
 }
 
-#export PS1='\[\${PURPLE}\][\[\${GREEN}\]\u\[\${GREEN}\]@\[\${GREEN}\]\h \[\${RED}\]\w\[\${RED}\]\[\${PURPLE}\]]\n\[\${WHITE}\]\$ '
 if [ -n "\$ZSH_VERSION" ]; then
 setopt PROMPT_SUBST
-PROMPT=\$'\n{\\__/}\n(● .●)\n/ >>> %{\${GREEN}%}\$(git-branch-prompt)%{\${RESET}%}'
+PROMPT=\$'\n{%\__/}\n(● .●)\n/ >>> %{\${GREEN}%}\$(git-branch-prompt)%{\${RESET}%}'
 else
 export PS1='\n{\\__/}\n(● .●)\n/ >>> \[\${GREEN}\]\$(git-branch-prompt)\[\${RESET}\]'
 fi
