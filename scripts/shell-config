@@ -165,7 +165,7 @@ alias cgit='bash -c "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/E
 alias cvim='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/vim-config)"'
 
 # install homebrew
-alias homebrew='bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+alias homebrew='bash -c "\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 
 EOF
 echo "==> 自定义配置已写入: $SH_CONFIG_FILE"
