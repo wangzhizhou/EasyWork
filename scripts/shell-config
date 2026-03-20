@@ -118,9 +118,9 @@ function git-branch-prompt() {
 
 if [ -n "\$ZSH_VERSION" ]; then
 setopt PROMPT_SUBST
-PROMPT=\$'\n{\\\__/}\n(● .●)\n/ >>> %{\${CYAN}%}\u@\h:\w%{\${RESET}%} %{\${GREEN}%}\$(git-branch-prompt)%{\${RESET}%}\n\$ '
+PROMPT=\$'\n{\\\__/}\n(● .●)\n/ >>> %{\${CYAN}%}\u@\h:\w%{\${RESET}%} %{\${GREEN}%}\$(git-branch-prompt)\n\$%{\${RESET}%} '
 else
-export PS1='\n{\\__/}\n(● .●)\n/ >>> \${CYAN}\]\u@\h:\w\[\${RESET} \[\${GREEN}\]\$(git-branch-prompt)\[\${RESET}\]\n\$ '
+export PS1='\n{\\__/}\n(● .●)\n/ >>> \${CYAN}\]\u@\h:\w\[\${RESET} \[\${GREEN}\]\$(git-branch-prompt)\n\$\[\${RESET}\] '
 fi
 
 # for system command
