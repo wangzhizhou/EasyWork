@@ -112,7 +112,7 @@ function git-branch-prompt() {
   then 
     hint=\$(git branch --format '%(refname:short) -> %(upstream:short)' | grep "^\${branch} -> ")
     basename=\$(basename \$(pwd))
-    printf "[%s: %s]\n$ " "\$basename" "\$hint"; 
+    printf "[%s: %s]" "\$basename" "\$hint"; 
   fi
 }
 
