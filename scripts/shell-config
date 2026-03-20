@@ -117,7 +117,7 @@ function git-branch-prompt() {
   fi
 }
 
-if [ -n "\$ZSH_VERSION" ]; then
+if [ -n "\${ZSH_VERSION:-}" ]; then
 setopt PROMPT_SUBST
 PROMPT=\$'\n{\\\__/}\n(● .●)\n/ >>> %{\${CYAN}%}\u@\h:\w%{\${RESET}%} %{\${GREEN}%}\$(git-branch-prompt)\n\$%{\${RESET}%} '
 else
