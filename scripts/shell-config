@@ -147,83 +147,70 @@ alias spm='swift package'
 
 # run n times command
 # eg: run 10 echo hello
-function run()
-{
+run() {
     number=\$1
     shift
     for n in \$(seq \$number); do "\$@"; done
 }
 
 # flush dns cache on MacOS
-function flushdns()
-{
+flushdns() {
   sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 }
 
 # 内部：参数检查
-function _require_name()
-{
-    if [ -z "$1" ]; then
+_require_name() {
+    if [ -z "\$1" ]; then
         echo "Missing service name" >&2
         return 1
     fi
 }
 # 列出所有网络服务
-function net_list()
-{
+net_list() {
     networksetup -listallnetworkservices
 }
 # 启用网络服务
-function net_enable()
-{
-    _require_name "$1" || return 1
-    networksetup -setnetworkserviceenabled "$1" on
+net_enable() {
+    _require_name "\$1" || return 1
+    networksetup -setnetworkserviceenabled "\$1" on
 }
 # 禁用网络服务
-function net_disable()
-{
-    _require_name "$1" || return 1
-    networksetup -setnetworkserviceenabled "$1" off
+net_disable() {
+    _require_name "\$1" || return 1
+    networksetup -setnetworkserviceenabled "\$1" off
 }
 # 查看网络服务启用状态
-function net_stat()
-{
-    _require_name "$1" || return 1
-    networksetup -getnetworkserviceenabled "$1"
+net_stat() {
+    _require_name "\$1" || return 1
+    networksetup -getnetworkserviceenabled "\$1"
 }
 
 # 列出可控制的 VPN 连接
-function vpn_list()
-{
+vpn_list() {
     scutil --nc list
 }
 # 启动 VPN 连接
-function vpn_start()
-{
-    _require_name "$1" || return 1
-    scutil --nc start "$1"
+vpn_start() {
+    _require_name "\$1" || return 1
+    scutil --nc start "\$1"
 }
 # 停止 VPN 连接
-function vpn_stop()
-{
-    _require_name "$1" || return 1
-    scutil --nc stop "$1"
+vpn_stop() {
+    _require_name "\$1" || return 1
+    scutil --nc stop "\$1"
 }
 # 查看 VPN 连接状态
-function vpn_stat()
-{
-    _require_name "$1" || return 1
-    scutil --nc status "$1"
+vpn_stat() {
+    _require_name "\$1" || return 1
+    scutil --nc status "\$1"
 }
-function vpn()
-{
-    vpn_stat "$1"
+vpn() {
+    vpn_stat "\$1"
 }
 # 重启 VPN
-function vpn_restart()
-{
-    _require_name "$1" || return 1
-    vpn_stop "$1" && sleep 1 && vpn_start "$1"
+vpn_restart() {
+    _require_name "\$1" || return 1
+    vpn_stop "\$1" && sleep 1 && vpn_start "\$1"
 }
 
 alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/shell-config)"'
