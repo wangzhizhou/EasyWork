@@ -212,6 +212,10 @@ vpn_restart() {
     _require_name "\$1" || return 1
     vpn_stop "\$1" && sleep 1 && vpn_start "\$1"
 }
+# 显示系统软硬件信息
+sys_info() {
+	system_profiler SPHardwareDataType SPSoftwareDataType
+}
 
 alias cshell='eval "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/shell-config)"'
 alias cgit='bash -c "\$(curl -sL https://raw.githubusercontent.com/wangzhizhou/EasyWork/master/scripts/git-config)"'
